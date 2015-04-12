@@ -17,20 +17,28 @@ module Professionalnerd #:nodoc:
             class_attribute :options
             table_name = options[:class_name].constantize.table_name
             
-            has_many :sent_messages,
-                     :class_name => options[:class_name],
-                     :foreign_key => 'sender_id',
-                     :include => :recipient,
-                     :order => "#{table_name}.created_at DESC",
-                     :conditions => ["#{table_name}.sender_deleted = ?", false]
+#            has_many :sent_messages,
+#                     :class_name => options[:class_name],
+#                     :foreign_key => 'sender_id',
+#                     :includes => :recipient,
+#                     :order => "#{table_name}.created_at DESC",
+#                     :conditions => ["#{table_name}.sender_deleted = ?", false]
+#
+#            has_many :received_messages,
+#                     :class_name => options[:class_name],
+#                     :foreign_key => 'recipient_id',
+#                     :includes => :sender,
+#                     :order => "#{table_name}.created_at DESC",
+#                     :conditions => ["#{table_name}.recipient_deleted = ?", false]
 
-            has_many :received_messages,
+             has_many :sent_messages, -> { includes(:recipient).order("#{table_name}.created_at DESC").where("#{table_name}.sender_deleted = ?", false) },
                      :class_name => options[:class_name],
-                     :foreign_key => 'recipient_id',
-                     :include => :sender,
-                     :order => "#{table_name}.created_at DESC",
-                     :conditions => ["#{table_name}.recipient_deleted = ?", false]
+                     :foreign_key => 'sender_id'
 
+            has_many :received_messages, -> { includes(:sender).order("#{table_name}.created_at DESC").where("#{table_name}.recipient_deleted = ?", false) },
+                     :class_name => options[:class_name],
+                     :foreign_key => 'recipient_id'
+                   
             extend ClassMethods 
             include InstanceMethods 
           end 

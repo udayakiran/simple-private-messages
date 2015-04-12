@@ -35,9 +35,9 @@ module Professionalnerd # :nodoc:
       module ClassMethods
         # Ensures the passed user is either the sender or the recipient then returns the message.
         # If the reader is the recipient and the message has yet not been read, it marks the read_at timestamp.
-        def read_message(id, reader)
-          message = find(id, :conditions => ["sender_id = ? OR recipient_id = ?", reader, reader])
-          if message.read_at.nil? && reader == message.recipient
+        def read_message(id, reader_id)
+          message = where(["sender_id = ? OR recipient_id = ?", reader_id, reader_id]).find(id)
+          if message.read_at.nil? && reader_id == message.recipient_id
             message.read_at = Time.now
             message.save!
           end
@@ -53,9 +53,9 @@ module Professionalnerd # :nodoc:
 
         # Marks a message as deleted by either the sender or the recipient, which ever the user that was passed is.
         # Once both have marked it deleted, it is destroyed.
-        def mark_deleted(user)
-          self.sender_deleted = true if self.sender == user
-          self.recipient_deleted = true if self.recipient == user
+        def mark_deleted(user_id)
+          self.sender_deleted = true if self.sender_id == user_id
+          self.recipient_deleted = true if self.recipient_id == user_id
           self.sender_deleted && self.recipient_deleted ? self.destroy : save!
         end
       end 
