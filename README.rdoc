@@ -1,8 +1,8 @@
 = Simple Private Messages
 
-Now Rails 3 compatible!
+Now Rails 4 compatible!
 
-For Rails 2.3.x users there is an appropriately named branch that can be used.
+For Rails 3.x and 2.3.x users there are appropriately named branch that can be used.
 
 This plugin provides basic private messaging functionality between the users
 of a site. It's not big on features but the idea is that it's nice and simple
