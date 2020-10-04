@@ -58,7 +58,7 @@ module Professionalnerd #:nodoc:
         
         # Returns the number of unread messages for this user
         def unread_message_count
-          eval options[:class_name] + '.count(:conditions => ["recipient_id = ? AND read_at IS NULL and recipient_deleted = ?", self, false])'
+          eval options[:class_name] + '.count(:conditions => ["recipient_id = ? AND read_at IS NULL and recipient_deleted = ?", self.id, false])'
         end
       end 
     end
